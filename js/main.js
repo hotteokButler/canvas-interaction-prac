@@ -6,6 +6,10 @@ const TYPE_KEY = Object.freeze({
 });
 
 (() => {
+  let yOffset = 0; //window.scrollY
+  let prevScrollHeight = 0; //현재 스크롤 위치(yOffset)보다 이전에 위치한 스크롤 섹션들의 스크롤 높이값의 합
+  let currentScene = 0; //현재 활성화된(눈 앞에 보고있는) 씬(scroll-section)
+
   const sceneInfo = [
     //0
     {
@@ -46,6 +50,7 @@ const TYPE_KEY = Object.freeze({
     },
   ];
 
+  //section height
   function setLayout() {
     //각 스크롤 섹션 높이 셋팅
     for (let i = 0; i < sceneInfo.length; i++) {
@@ -53,6 +58,25 @@ const TYPE_KEY = Object.freeze({
       sceneInfo[i].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`;
     }
   }
+
+  //scroll
+  function scrollLoop() {
+    prevScrollHeight = 0;
+    for (let i = 0; i < currentScene; i++) {
+      prevScrollHeight += sceneInfo[i].scrollHeight;
+    }
+
+    if (yOffset > prevScrollHeight + sceneInfo[currentScene]?.scrollHeight) {
+      currentScene++;
+    }
+    if (yOffset < prevScrollHeight) {
+      currentScene--;
+    }
+  }
   window.addEventListener('resize', setLayout);
+  window.addEventListener('scroll', () => {
+    yOffset = window.scrollY;
+    scrollLoop();
+  });
   setLayout();
 })();
