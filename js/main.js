@@ -19,6 +19,13 @@ const TYPE_KEY = Object.freeze({
       scrollHeight: 0,
       objs: {
         container: document.querySelector('#scroll-section-0'),
+        messageA: document.querySelector('#scroll-section-0 .main-message.a'),
+        messageB: document.querySelector('#scroll-section-0 .main-message.b'),
+        messageC: document.querySelector('#scroll-section-0 .main-message.c'),
+        messageD: document.querySelector('#scroll-section-0 .main-message.d'),
+      },
+      values: {
+        messageA_opacity: [0, 1],
       },
     },
     //1
@@ -57,6 +64,18 @@ const TYPE_KEY = Object.freeze({
       sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
       sceneInfo[i].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`;
     }
+
+    let totalScrollheight = 0;
+    yOffset = window.scrollY;
+
+    for (let i = 0; i < sceneInfo.length; i++) {
+      totalScrollheight += sceneInfo[i].scrollHeight;
+      if (totalScrollheight >= yOffset) {
+        currentScene = i;
+        break;
+      }
+    }
+    document.querySelector('body').setAttribute('id', `show-scene-${currentScene}`);
   }
 
   //scroll
@@ -70,18 +89,44 @@ const TYPE_KEY = Object.freeze({
       currentScene++;
     }
     if (yOffset < prevScrollHeight) {
-      // 모바일 브라우저 바운스 효과로인해 음수처리 되는것 방지
-      if (currentScene === 0) return;
+      if (currentScene === 0) return; // 모바일 브라우저 바운스 효과로인해 음수처리 되는것 방지
       currentScene--;
     }
 
     document.querySelector('body').setAttribute('id', `show-scene-${currentScene}`);
   }
+  // scroll_animation 처리
 
-  window.addEventListener('resize', setLayout);
+  function calculateValue(value, currentOffsetY) {
+    let rv;
+    //현재 scene에서 스크롤된 범위 비율
+    let scrollRetio = currentOffsetY / sceneInfo[currentScene].scrollHeight;
+    rv = scrollRetio * (value[1] - value[0]) + value[0];
+    return rv;
+  }
+
+  function playAnimation() {
+    const objs = sceneInfo[currentScene].objs;
+    const values = sceneInfo[currentScene].values;
+    const currentOffsetY = yOffset - prevScrollHeight;
+
+    switch (currentScene) {
+      case 0:
+        let messageA_opacity_in = calculateValue(values.messageA_opacity, currentOffsetY);
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+    }
+  }
   window.addEventListener('scroll', () => {
     yOffset = window.scrollY;
     scrollLoop();
+    playAnimation();
   });
-  setLayout();
+  window.addEventListener('load', setLayout);
+  window.addEventListener('resize', setLayout);
 })();
