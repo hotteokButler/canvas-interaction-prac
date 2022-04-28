@@ -70,6 +70,7 @@ const TYPE_KEY = Object.freeze({
       currentScene++;
     }
     if (yOffset < prevScrollHeight) {
+      if (currentScene === 0) return;
       currentScene--;
     }
   }
