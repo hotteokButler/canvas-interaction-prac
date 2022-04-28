@@ -70,10 +70,14 @@ const TYPE_KEY = Object.freeze({
       currentScene++;
     }
     if (yOffset < prevScrollHeight) {
+      // 모바일 브라우저 바운스 효과로인해 음수처리 되는것 방지
       if (currentScene === 0) return;
       currentScene--;
     }
+
+    document.querySelector('body').setAttribute('id', `show-scene-${currentScene}`);
   }
+
   window.addEventListener('resize', setLayout);
   window.addEventListener('scroll', () => {
     yOffset = window.scrollY;
