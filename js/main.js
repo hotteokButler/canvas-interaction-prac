@@ -32,6 +32,7 @@ const TYPE_KEY = Object.freeze({
         //videoImages
         videoImageCount: 300,
         imageSequence: [0, 299],
+        canvasOpacity: [1, 0, { start: 0.88, end: 0.98 }],
         //messageA
         messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
         messageA_opacity_out: [1, 0, { start: 0.25, end: 0.3 }],
@@ -51,7 +52,6 @@ const TYPE_KEY = Object.freeze({
         messageD_opacity_in: [0, 1, { start: 0.7, end: 0.8 }],
         messageD_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
         messageD_translateY_in: [20, 0, { start: 0.7, end: 0.8 }],
-
         messageD_translateY_out: [0, -20, { start: 0.85, end: 0.9 }],
       },
     },
@@ -148,6 +148,8 @@ const TYPE_KEY = Object.freeze({
       }
     }
     document.querySelector('body').setAttribute('id', `show-scene-${currentScene}`);
+    const heightRatio = window.innerHeight / 1080;
+    sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
   }
 
   //scroll
@@ -213,7 +215,7 @@ const TYPE_KEY = Object.freeze({
       case 0:
         let sequence = Math.round(calculateValue(values.imageSequence, currentOffsetY));
         objs.context.drawImage(objs.videoImages[sequence], 0, 0);
-
+        objs.canvas.style.opacity = calculateValue(values.canvasOpacity, currentOffsetY);
         //messageA
         if (scrollRatio <= 0.22) {
           //fade-in
@@ -354,6 +356,9 @@ const TYPE_KEY = Object.freeze({
     yOffset = window.scrollY;
     scrollLoop();
   });
-  window.addEventListener('load', setLayout);
+  window.addEventListener('load', () => {
+    setLayout();
+    sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0);
+  });
   window.addEventListener('resize', setLayout);
 })();

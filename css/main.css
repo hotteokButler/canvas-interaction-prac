@@ -193,9 +193,14 @@ a {
 }
 
 .sticky-elem-canvas {
-  width: 100%;
   top: 0;
-  background-color: #efefef;
+  height: 100%;
+}
+
+.sticky-elem-canvas canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
 @media (min-width: 1024px) {
