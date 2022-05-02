@@ -19,6 +19,9 @@ const TYPE_KEY = Object.freeze({
       heightNum: 5,
       scrollHeight: 0,
       objs: {
+        canvas: document.querySelector('#video-canvas-0'),
+        context: document.querySelector('#video-canvas-0').getContext('2d'),
+        videoImages: [],
         container: document.querySelector('#scroll-section-0'),
         messageA: document.querySelector('#scroll-section-0 .main-message.a'),
         messageB: document.querySelector('#scroll-section-0 .main-message.b'),
@@ -26,6 +29,9 @@ const TYPE_KEY = Object.freeze({
         messageD: document.querySelector('#scroll-section-0 .main-message.d'),
       },
       values: {
+        //videoImages
+        videoImageCount: 300,
+        imageSequence: [0, 299],
         //messageA
         messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
         messageA_opacity_out: [1, 0, { start: 0.25, end: 0.3 }],
@@ -45,6 +51,7 @@ const TYPE_KEY = Object.freeze({
         messageD_opacity_in: [0, 1, { start: 0.7, end: 0.8 }],
         messageD_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
         messageD_translateY_in: [20, 0, { start: 0.7, end: 0.8 }],
+
         messageD_translateY_out: [0, -20, { start: 0.85, end: 0.9 }],
       },
     },
@@ -107,6 +114,17 @@ const TYPE_KEY = Object.freeze({
     },
   ];
 
+  //canvas
+
+  function setCanvasImages() {
+    let imgElem;
+    for (let i = 0; i < sceneInfo[0].values.videoImageCount; i++) {
+      imgElem = new Image();
+      imgElem.src = `./video/001/IMG_${6726 + i}.JPG`;
+      sceneInfo[0].objs.videoImages.push(imgElem);
+    }
+  }
+  setCanvasImages();
   //section height
   function setLayout() {
     //각 스크롤 섹션 높이 셋팅
@@ -193,6 +211,9 @@ const TYPE_KEY = Object.freeze({
 
     switch (currentScene) {
       case 0:
+        let sequence = Math.round(calculateValue(values.imageSequence, currentOffsetY));
+        objs.context.drawImage(objs.videoImages[sequence], 0, 0);
+
         //messageA
         if (scrollRatio <= 0.22) {
           //fade-in

@@ -34,6 +34,7 @@ a {
   width: 100%;
   height: 44px;
   padding: 0 1rem;
+  z-index: 9;
 }
 
 .local-nav {
@@ -44,6 +45,7 @@ a {
   height: 52px;
   padding: 0 1rem;
   border-bottom: 1px solid #ddd;
+  z-index: 10;
 }
 
 .global-nav-links,
@@ -188,6 +190,12 @@ a {
   height: 7em;
   color: #fff;
   background-color: rgb(244, 175, 47);
+}
+
+.sticky-elem-canvas {
+  width: 100%;
+  top: 0;
+  background-color: #efefef;
 }
 
 @media (min-width: 1024px) {
