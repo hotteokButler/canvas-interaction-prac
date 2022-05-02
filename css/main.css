@@ -70,6 +70,7 @@ a {
 }
 
 .scroll-section {
+  position: relative;
   padding: 50vh 0 0;
 }
 
@@ -84,7 +85,6 @@ a {
   align-items: center;
   height: 3em;
   top: 35vh;
-
   font-size: 2.5rem;
   opacity: 0;
 }

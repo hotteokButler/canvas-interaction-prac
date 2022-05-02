@@ -51,10 +51,10 @@ const TYPE_KEY = Object.freeze({
     //1
     {
       type: TYPE_KEY.normal,
-      heightNum: 5,
       scrollHeight: 0,
       objs: {
         container: document.querySelector('#scroll-section-1'),
+        content: document.querySelector('#scroll-section-1 .description'),
       },
     },
     //2
@@ -64,6 +64,35 @@ const TYPE_KEY = Object.freeze({
       scrollHeight: 0,
       objs: {
         container: document.querySelector('#scroll-section-2'),
+        messageA: document.querySelector('#scroll-section-2 .a'),
+        messageB: document.querySelector('#scroll-section-2 .b'),
+        messageC: document.querySelector('#scroll-section-2 .c'),
+        pinB: document.querySelector('#scroll-section-2 .b .pin'),
+        pinC: document.querySelector('#scroll-section-2 .c .pin'),
+      },
+      values: {
+        //
+        messageA_opacity_in: [0, 1, { start: 0.15, end: 0.2 }],
+        messageA_opacity_out: [1, 0, { start: 0.3, end: 0.35 }],
+        messageA_translateY_in: [20, 0, { start: 0.15, end: 0.2 }],
+        messageA_translateY_out: [0, -20, { start: 0.3, end: 0.35 }],
+        //
+        messageB_opacity_in: [0, 1, { start: 0.5, end: 0.55 }],
+        messageB_opacity_out: [1, 0, { start: 0.58, end: 0.63 }],
+        messageB_translateY_in: [30, 0, { start: 0.5, end: 0.55 }],
+        messageB_translateY_out: [0, -20, { start: 0.58, end: 0.63 }],
+        //
+        messageC_opacity_in: [0, 1, { start: 0.72, end: 0.77 }],
+        messageC_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
+        messageC_translateY_in: [30, 0, { start: 0.72, end: 0.77 }],
+        messageC_translateY_out: [0, -20, { start: 0.85, end: 0.9 }],
+        //
+        pinB_scaleY: [0.5, 1, { start: 0.5, end: 0.55 }],
+        pinB_opacity_in: [0, 1, { start: 0.5, end: 0.55 }],
+        pinB_opacity_out: [1, 0, { start: 0.58, end: 0.63 }],
+        pinC_scaleY: [0.5, 1, { start: 0.72, end: 0.77 }],
+        pinC_opacity_in: [0, 1, { start: 0.72, end: 0.77 }],
+        pinC_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
       },
     },
     //3
@@ -74,6 +103,7 @@ const TYPE_KEY = Object.freeze({
       objs: {
         container: document.querySelector('#scroll-section-3'),
       },
+      values: {},
     },
   ];
 
@@ -83,8 +113,8 @@ const TYPE_KEY = Object.freeze({
     for (let i = 0; i < sceneInfo.length; i++) {
       if (sceneInfo[i].type === TYPE_KEY.sticky) {
         sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
-      } else if (sceneInfo[i] === TYPE_KEY.normal) {
-        sceneInfo[i].scrollHeight = sceneInfo[i].objs.container.getBoundingClientRect().height;
+      } else if (sceneInfo[i].type === TYPE_KEY.normal) {
+        sceneInfo[i].scrollHeight = sceneInfo[i].objs.content.offsetHeight + window.innerHeight;
       }
       sceneInfo[i].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`;
     }
@@ -229,9 +259,71 @@ const TYPE_KEY = Object.freeze({
         }
 
         break;
-      case 1:
-        break;
+
       case 2:
+        if (scrollRatio <= 0.25) {
+          //fade-in
+          objs.messageA.style.opacity = calculateValue(values.messageA_opacity_in, currentOffsetY);
+          objs.messageA.style.transform = `translate3d(0,${calculateValue(
+            values.messageA_translateY_in,
+            currentOffsetY
+          )}%,0)`;
+        } else {
+          //fade-out
+          objs.messageA.style.opacity = calculateValue(values.messageA_opacity_out, currentOffsetY);
+          objs.messageA.style.transform = `translate3d(0,${calculateValue(
+            values.messageA_translateY_out,
+            currentOffsetY
+          )}%,0)`;
+        }
+
+        if (scrollRatio <= 0.57) {
+          //fade-in
+          objs.messageB.style.opacity = calculateValue(values.messageB_opacity_in, currentOffsetY);
+          objs.messageB.style.transform = `translate3d(0,${calculateValue(
+            values.messageB_translateY_in,
+            currentOffsetY
+          )}%,0)`;
+          objs.pinB.style.transform = `scaleY(${calculateValue(
+            values.pinB_scaleY,
+            currentOffsetY
+          )})`;
+        } else {
+          //fade-out
+          objs.messageB.style.opacity = calculateValue(values.messageB_opacity_out, currentOffsetY);
+          objs.messageB.style.transform = `translate3d(0,${calculateValue(
+            values.messageB_translateY_out,
+            currentOffsetY
+          )}%,0)`;
+          objs.pinB.style.transform = `scaleY(${calculateValue(
+            values.pinB_scaleY,
+            currentOffsetY
+          )})`;
+        }
+
+        if (scrollRatio <= 0.83) {
+          //fade-in
+          objs.messageC.style.opacity = calculateValue(values.messageC_opacity_in, currentOffsetY);
+          objs.messageC.style.transform = `translate3d(0,${calculateValue(
+            values.messageC_translateY_in,
+            currentOffsetY
+          )}%,0)`;
+          objs.pinC.style.transform = `scaleY(${calculateValue(
+            values.pinC_scaleY,
+            currentOffsetY
+          )})`;
+        } else {
+          //fade-out
+          objs.messageC.style.opacity = calculateValue(values.messageC_opacity_out, currentOffsetY);
+          objs.messageC.style.transform = `translate3d(0,${calculateValue(
+            values.messageC_translateY_out,
+            currentOffsetY
+          )}%,0)`;
+          objs.pinC.style.transform = `scaleY(${calculateValue(
+            values.pinC_scaleY,
+            currentOffsetY
+          )})`;
+        }
         break;
       case 3:
         break;
