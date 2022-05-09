@@ -76,8 +76,15 @@ const TYPE_KEY = Object.freeze({
         messageC: document.querySelector('#scroll-section-2 .c'),
         pinB: document.querySelector('#scroll-section-2 .b .pin'),
         pinC: document.querySelector('#scroll-section-2 .c .pin'),
+        canvas: document.querySelector('#video-canvas-1'),
+        context: document.querySelector('#video-canvas-1').getContext('2d'),
+        videoImages: [],
       },
       values: {
+        videoImageCount: 960,
+        imageSequence: [0, 959],
+        canvas_opacity_in: [0, 1, { start: 0, end: 0.15 }],
+        canvas_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
         //
         messageA_opacity_in: [0, 1, { start: 0.15, end: 0.2 }],
         messageA_opacity_out: [1, 0, { start: 0.3, end: 0.35 }],
@@ -123,8 +130,15 @@ const TYPE_KEY = Object.freeze({
       imgElem.src = `./video/001/IMG_${6726 + i}.JPG`;
       sceneInfo[0].objs.videoImages.push(imgElem);
     }
+    let imgElem2;
+    for (let i = 0; i < sceneInfo[2].values.videoImageCount; i++) {
+      imgElem2 = new Image();
+      imgElem2.src = `./video/002/IMG_${7027 + i}.JPG`;
+      sceneInfo[2].objs.videoImages.push(imgElem2);
+    }
   }
   setCanvasImages();
+
   //section height
   function setLayout() {
     //각 스크롤 섹션 높이 셋팅
@@ -150,6 +164,7 @@ const TYPE_KEY = Object.freeze({
     document.querySelector('body').setAttribute('id', `show-scene-${currentScene}`);
     const heightRatio = window.innerHeight / 1080;
     sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
+    sceneInfo[2].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
   }
 
   //scroll
@@ -284,6 +299,15 @@ const TYPE_KEY = Object.freeze({
         break;
 
       case 2:
+        let sequence2 = Math.round(calculateValue(values.imageSequence, currentOffsetY));
+        objs.context.drawImage(objs.videoImages[sequence2], 0, 0);
+        if (scrollRatio <= 0.5) {
+          //canvas-fade-in
+          objs.canvas.style.opacity = calculateValue(values.canvas_opacity_in, currentOffsetY);
+        } else {
+          //canvas-fade-out
+          objs.canvas.style.opacity = calculateValue(values.canvas_opacity_out, currentOffsetY);
+        }
         if (scrollRatio <= 0.25) {
           //fade-in
           objs.messageA.style.opacity = calculateValue(values.messageA_opacity_in, currentOffsetY);
