@@ -416,7 +416,9 @@ const TYPE_KEY = Object.freeze({
           values.rectStartY =
             objs.canvas.offsetTop +
             (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2;
+          values.rect1X[2].start = window.innerHeight / 2 / scrollHeight;
           values.rect1X[2].end = values.rectStartY / scrollHeight;
+          values.rect2X[2].start = window.innerHeight / 2 / scrollHeight;
           values.rect2X[2].end = values.rectStartY / scrollHeight;
         }
 
