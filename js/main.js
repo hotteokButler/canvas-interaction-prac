@@ -125,6 +125,7 @@ const TYPE_KEY = Object.freeze({
       values: {
         rect1X: [0, 0, { start: 0, end: 0 }],
         rect2X: [0, 0, { start: 0, end: 0 }],
+        blendHeight: [0, 0, { start: 0, end: 0 }],
         rectStartY: 0,
       },
     },
@@ -493,6 +494,24 @@ const TYPE_KEY = Object.freeze({
           objs.canvas.classList.remove(TYPE_KEY.sticky);
         } else {
           step = 2;
+          values.blendHeight[0] = 0;
+          values.blendHeight[1] = objs.canvas.height;
+          values.blendHeight[2].start = values.rect1X[2].end;
+          values.blendHeight[2].end = values.blendHeight[2].start + 0.2;
+          const blendHeight = calculateValue(values.blendHeight, currentOffsetY);
+
+          objs.context.drawImage(
+            objs.images[1],
+            0,
+            objs.canvas.height - blendHeight,
+            objs.canvas.width,
+            blendHeight,
+            0,
+            objs.canvas.height - blendHeight,
+            objs.canvas.width,
+            blendHeight
+          );
+
           objs.canvas.classList.add(TYPE_KEY.sticky);
           objs.canvas.style.top = `-${
             (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2
