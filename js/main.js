@@ -431,6 +431,7 @@ const TYPE_KEY = Object.freeze({
 
         break;
       case 3:
+        let step = 0;
         // 가로 세로 모두 꽉 차게 하기위해 여기서 셋팅(계산)
         const widthRatio = window.innerWidth / objs.canvas.width;
         const heightRatio = window.innerHeight / objs.canvas.height;
@@ -486,6 +487,17 @@ const TYPE_KEY = Object.freeze({
           parseInt(whiteRectWidth),
           objs.canvas.height
         );
+
+        if (scrollRatio < values.rect1X[2].end) {
+          step = 1;
+          objs.canvas.classList.remove(TYPE_KEY.sticky);
+        } else {
+          step = 2;
+          objs.canvas.classList.add(TYPE_KEY.sticky);
+          objs.canvas.style.top = `-${
+            (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2
+          }px`;
+        }
 
         break;
     }

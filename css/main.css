@@ -211,6 +211,10 @@ a {
   align-items: center;
 }
 
+.image-blend-canvas.sticky {
+  position: fixed;
+}
+
 @media (min-width: 1024px) {
   #scroll-section-0 h1 {
     font-size: 9vw;
