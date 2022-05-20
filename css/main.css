@@ -214,7 +214,13 @@ a {
 .image-blend-canvas.sticky {
   position: fixed;
 }
-
+.canvas-caption {
+  max-width: 1000px;
+  margin: -12em auto 0;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+  color: #888;
+}
 @media (min-width: 1024px) {
   #scroll-section-0 h1 {
     font-size: 9vw;

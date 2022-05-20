@@ -116,7 +116,7 @@ const TYPE_KEY = Object.freeze({
       scrollHeight: 0,
       objs: {
         container: document.querySelector('#scroll-section-3'),
-        canvasCaption: document.querySelector('.canvas-captioin'),
+        canvasCaption: document.querySelector('.canvas-caption'),
         canvas: document.querySelector('.image-blend-canvas'),
         context: document.querySelector('.image-blend-canvas').getContext('2d'),
         imagesPath: ['./images/blend-image-1.jpg', './images/blend-image-2.jpg'],
@@ -127,6 +127,8 @@ const TYPE_KEY = Object.freeze({
         rect2X: [0, 0, { start: 0, end: 0 }],
         blendHeight: [0, 0, { start: 0, end: 0 }],
         canvas_scale: [0, 0, { start: 0, end: 0 }],
+        canvasCaption_opacity: [0, 1, { start: 0, end: 0 }],
+        canvasCaption_translateY: [20, 0, { start: 0, end: 0 }],
         rectStartY: 0,
       },
     },
@@ -514,6 +516,7 @@ const TYPE_KEY = Object.freeze({
           );
 
           objs.canvas.classList.add(TYPE_KEY.sticky);
+
           objs.canvas.style.top = `-${
             (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2
           }px`;
@@ -528,6 +531,25 @@ const TYPE_KEY = Object.freeze({
               values.canvas_scale,
               currentOffsetY
             )})`;
+            objs.canvas.style.marginTop = `0px`;
+          }
+
+          if (scrollRatio > values.canvas_scale[2].end && values.canvas_scale[2].end > 0) {
+            objs.canvas.classList.remove(TYPE_KEY.sticky);
+            objs.canvas.style.marginTop = `${scrollHeight * 0.4}px`;
+
+            values.canvasCaption_opacity[2].start = values.canvas_scale[2].end;
+            values.canvasCaption_opacity[2].end = values.canvasCaption_opacity[2].start + 0.1;
+            values.canvasCaption_translateY[2].start = values.canvas_scale[2].end;
+            values.canvasCaption_translateY[2].end = values.canvasCaption_opacity[2].start + 0.1;
+            objs.canvasCaption.style.opacity = calculateValue(
+              values.canvasCaption_opacity,
+              currentOffsetY
+            );
+            objs.canvasCaption.style.transform = `translate3d(0, ${calculateValue(
+              values.canvasCaption_translateY,
+              currentOffsetY
+            )}%,0)`;
           }
         }
 
